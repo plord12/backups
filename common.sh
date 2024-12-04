@@ -5,13 +5,6 @@
 # MQTT username / password is set in ~/.config/mosquitto_pub
 #
 
-if [ "${USER}" = "root" ]
-then
-	SUDO=
-else
-	SUDO="sudo -E"
-fi
-
 # allow to be overrridden - eg run as root or set cache options
 #
 RESTIC=restic
@@ -47,7 +40,7 @@ success() {
 	mosquitto_pub -r -t "homeassistant/sensor/restic/${id}/state" -m "Success"
 	short_id=$(${RESTIC} snapshots --host $(hostname) --path "${1}" --latest 1 --json | jq -r '.[0].short_id')
 	mosquitto_pub -r -t "homeassistant/sensor/restic/${id}/attributes" \
-		-m "$(${RESTIC} /var/root/restic-cache snapshots ${short_id} --json | jq -c 'add')"
+		-m "$(${RESTIC} snapshots ${short_id} --json | jq -c 'add')"
 }
 
 # report backup was a failure

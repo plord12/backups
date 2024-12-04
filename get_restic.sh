@@ -2,10 +2,12 @@
 #
 # get restic & test-server binary for this platform
 
-# bring in common functions
-#
-cd $(dirname $0)
-. ./common.sh
+if [ "${USER}" = "root" ]
+then
+	SUDO=
+else
+	SUDO="sudo -E"
+fi
 
 arch=$(uname -m)
 os=$(uname -s | tr 'A-Z' 'a-z')

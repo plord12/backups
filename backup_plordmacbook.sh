@@ -18,12 +18,14 @@ cd $(dirname $0)
 #
 . ~/.profile
 
+set -e
+
 PATH=/usr/local/bin:/opt/homebrew/bin:$PATH
 export PATH
 
 # run as root and ensure we use common cache
 #
-RESTIC="$(SUDO) restic --cache-dir /var/root/restic-cache"
+RESTIC="sudo -E restic --cache-dir /var/root/restic-cache"
 
 # backup home directory
 #
@@ -42,7 +44,7 @@ ${RESTIC} backup --tag Wokingham '/Users/plord/Calibre Library' 2>/tmp/resticerr
 # sync ebooks to webserver, although not currently used
 #
 echo "Rsyncing /Users/plord/Calibre Library"
-rsync --rsync-path '$(SUDO) -u calibre rsync' -avz --delete '/Users/plord/Calibre Library/' arm3.local:/var/CalibreLibrary/
+rsync --rsync-path 'sudo -E -u calibre rsync' -avz --delete '/Users/plord/Calibre Library/' arm3.local:/var/CalibreLibrary/
 
 # sleep after 1mins
 #

@@ -2,8 +2,6 @@
 
 # backup for arm1
 
-
-
 # bring in common functions
 #
 cd $(dirname $0)

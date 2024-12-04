@@ -31,7 +31,7 @@ export RESTIC_FROM_PASSWORD=${RESTIC_PASSWORD}
 
 # run as www-data
 #
-RESTIC="sudo -E restic --no-cache"
+RESTIC="sudo -E -u www-data restic --no-cache"
 
 # Wok -> Ply
 echo "Wokingham -> Plymouth"

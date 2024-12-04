@@ -2,6 +2,19 @@
 
 # common utility functions for backups
 #
+# MQTT username / password is set in ~/.config/mosquitto_pub
+#
+
+if [ "${USER}" = "root" ]
+then
+	SUDO=
+else
+	SUDO="sudo -E"
+fi
+
+# allow to be overrridden - eg run as root or set cache options
+#
+RESTIC=restic
 
 # delete MQTT topic - only used when we got things wrong
 #
@@ -32,9 +45,9 @@ running() {
 success() {
 	id="restic_$(hostname | tr " '.-/" "_")$(echo "${1}" | tr " '.-/" "_" | sed -e 's+_$++')"
 	mosquitto_pub -r -t "homeassistant/sensor/restic/${id}/state" -m "Success"
-	short_id=$(sudo -E restic --cache-dir /var/root/restic-cache snapshots --host $(hostname) --path "${1}" --latest 1 --json | jq -r '.[0].short_id')
+	short_id=$(${RESTIC} snapshots --host $(hostname) --path "${1}" --latest 1 --json | jq -r '.[0].short_id')
 	mosquitto_pub -r -t "homeassistant/sensor/restic/${id}/attributes" \
-		-m "$(sudo -E restic --cache-dir /var/root/restic-cache snapshots ${short_id} --json | jq -c 'add')"
+		-m "$(${RESTIC} /var/root/restic-cache snapshots ${short_id} --json | jq -c 'add')"
 }
 
 # report backup was a failure

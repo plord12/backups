@@ -21,24 +21,28 @@ cd $(dirname $0)
 PATH=/usr/local/bin:/opt/homebrew/bin:$PATH
 export PATH
 
+# run as root and ensure we use common cache
+#
+RESTIC="$(SUDO) restic --cache-dir /var/root/restic-cache"
+
 # backup home directory
 #
 echo "Backing up /Users/plord"
 create_topic /Users/plord
 running /Users/plord
-sudo -E restic --cache-dir /var/root/restic-cache backup --tag Wokingham /Users/plord --exclude /Users/plord/Library/CloudStorage --exclude '/Users/plord/Calibre Library/' 2>/tmp/resticerror && success /Users/plord || failure /Users/plord $(cat /tmp/resticerror)
+${RESTIC} backup --tag Wokingham /Users/plord --exclude /Users/plord/Library/CloudStorage --exclude '/Users/plord/Calibre Library/' 2>/tmp/resticerror && success /Users/plord || failure /Users/plord $(cat /tmp/resticerror)
 
 # backup ebooks seperatly
 #
 echo "Backing up /Users/plord/Calibre Library"
 create_topic '/Users/plord/Calibre Library'
 running '/Users/plord/Calibre Library'
-sudo -E restic --cache-dir /var/root/restic-cache backup --tag Wokingham '/Users/plord/Calibre Library' 2>/tmp/resticerror && success '/Users/plord/Calibre Library' || failure '/Users/plord/Calibre Library' $(cat /tmp/resticerror)
+${RESTIC} backup --tag Wokingham '/Users/plord/Calibre Library' 2>/tmp/resticerror && success '/Users/plord/Calibre Library' || failure '/Users/plord/Calibre Library' $(cat /tmp/resticerror)
 
 # sync ebooks to webserver, although not currently used
 #
 echo "Rsyncing /Users/plord/Calibre Library"
-rsync --rsync-path 'sudo -u calibre rsync' -avz --delete '/Users/plord/Calibre Library/' arm3.local:/var/CalibreLibrary/
+rsync --rsync-path '$(SUDO) -u calibre rsync' -avz --delete '/Users/plord/Calibre Library/' arm3.local:/var/CalibreLibrary/
 
 # sleep after 1mins
 #

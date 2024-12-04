@@ -17,7 +17,8 @@ set -e
 #
 export GOMAXPROCS=1
 RESTIC="restic --no-cache"
+RESTICHOSTNAME=arm1
 
 create_topic /backup
 running /backup
-${RESTIC} backup --exclude _swap.swap --no-scan --host arm1 --tag Wokingham /backup 2>/tmp/resticerror && success /backup || failure /backup $(cat /tmp/resticerror)
+${RESTIC} backup --exclude _swap.swap --no-scan --host ${RESTICHOSTNAME} --tag Wokingham /backup 2>/tmp/resticerror && success /backup || failure /backup $(cat /tmp/resticerror)

@@ -27,11 +27,11 @@ RESTIC="sudo -E restic --cache-dir /root/.cache/restic"
 echo "Backing up /home"
 create_topic /home
 running /home
-${RESTIC} backup  --tag Wokingham --exclude .cache --exclude .cargo --exclude .gradle --exclude .rustup /home 2>/tmp/resticerror && success /home || failure /home $(cat /tmp/resticerror)
+${RESTIC} backup  --tag Plymouth --exclude .cache --exclude .cargo --exclude .gradle --exclude .rustup /home 2>/tmp/resticerror && success /home || failure /home $(cat /tmp/resticerror)
 
 # backup /etc
 #
 echo "Backing up /etc"
 create_topic /etc
 running /etc
-${RESTIC} backup --tag Wokingham --exclude .cache /etc /usr/local /root /var/spool /opt 2>/tmp/resticerror && success /etc || failure /etc $(cat /tmp/resticerror)
+${RESTIC} backup --tag Plymouth --exclude .cache /etc /usr/local /root /var/spool /opt 2>/tmp/resticerror && success /etc || failure /etc $(cat /tmp/resticerror)

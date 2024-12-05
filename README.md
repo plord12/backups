@@ -11,6 +11,8 @@ My backup scripts and documentation
 
 I mostly use [restic](https://restic.readthedocs.io/en/stable/) with a few additional tools as needed.
 
+![diagram](https://docs.google.com/drawings/d/e/2PACX-1vQgVHysoptpq_CSHk-sWIqRQwO5Lw4LZq4QoVlBWlnTAkL_M2rmw9g-Qp5aR-FPnMz_TqUAw8-iK1Lp/pub?w=960&amp;h=720)
+
 ## Backup scripts
 
 Each machine I backup has a backup script which uses common functions.  Usually these are started by cron.  For example, on 
@@ -63,7 +65,7 @@ actions:
   - action: script.info
     metadata: {}
     data:
-      message: restic backup reported failure.  Topic:{{ trigger.topic }}
+      message: Restic {{ trigger.payload }}.  Topic:{{ trigger.topic }}
 mode: single
 ```
 

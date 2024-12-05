@@ -33,7 +33,12 @@ export RESTIC_FROM_PASSWORD=${RESTIC_PASSWORD}
 #
 RESTIC="sudo -E -u www-data restic --no-cache"
 
+# add tag for phone
+#
+${RESTIC} tag --set Wokingham $(${RESTIC} snapshots --json --host "Peter's Galaxy S20 FE 5G" | jq -r '.[] | "\(.short_id)"')
+
 # Wok -> Ply
+#
 echo "Wokingham -> Plymouth"
 export RESTIC_FROM_REPOSITORY=${WOK_REPO}
 export RESTIC_REPOSITORY=${PLY_REPO}
@@ -41,6 +46,7 @@ out=$(${RESTIC} --repo ${PLY_REPO} copy --from-repo ${WOK_REPO} $(${RESTIC} --re
 echo ${out}
 
 # Ply -> Wok
+#
 echo "Plymouth -> Wokingham"
 export RESTIC_FROM_REPOSITORY=${PLY_REPO}
 export RESTIC_REPOSITORY=${WOK_REPO}

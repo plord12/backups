@@ -9,7 +9,10 @@ cd $(dirname $0)
 
 # sets $RESTIC_REPOSITORY and $RESTIC_PASSWORD
 #
-. ~/.profile
+# note $HOME gets wiped on upgrade, so we put this in the current directory
+. ./.profile
+export PATH=${PATH}:$(pwd)
+export XDG_CONFIG_HOME=$(pwd)
 
 set -e
 

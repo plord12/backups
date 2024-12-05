@@ -23,7 +23,12 @@ set -e
 curl -L -O https://github.com/restic/restic/releases/download/v${restic_ver}/restic_${restic_ver}_${os}_${arch}.bz2
 bunzip2 restic_${restic_ver}_${os}_${arch}.bz2
 chmod a+x restic_${restic_ver}_${os}_${arch}
-${SUDO} cp restic_${restic_ver}_${os}_${arch} /usr/local/bin/restic
+if [ "$(uname -n)" = "core-ssh" ]
+then
+	${SUDO} cp restic_${restic_ver}_${os}_${arch} restic
+else
+	${SUDO} cp restic_${restic_ver}_${os}_${arch} /usr/local/bin/restic
+fi
 rm restic_${restic_ver}_${os}_${arch} 
 
 curl -L -O https://github.com/restic/rest-server/releases/download/v0.13.0/rest-server_0.13.0_${os}_${arch}.tar.gz

@@ -3,8 +3,19 @@
 # copy to offsite backup
 #
 
+# stop VPN
+#
+function stopvpn() {
+	echo "Stopping VPN"
+	sudo ifdown wg0
+	exit
+}
+
+trap stopvpn EXIT
+
 # start VPN
 #
+echo "Starting VPN"
 sudo ifup wg0
 
 export GOGC=20
@@ -31,7 +42,7 @@ export RESTIC_FROM_PASSWORD=${RESTIC_PASSWORD}
 
 # run as www-data
 #
-RESTIC="sudo -E -u www-data restic --no-cache"
+RESTIC="sudo -E -u www-data restic --no-cache --retry-lock 5m"
 
 # add tag for phone
 #
@@ -81,6 +92,3 @@ do
   RESTICHOSTNAME="${hostname}" RESTIC_REPOSITORY=${WOK_REPO} success "${paths}"
 done
 
-# stop VPN
-#
-sudo ifdown wg0

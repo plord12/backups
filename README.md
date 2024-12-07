@@ -134,54 +134,67 @@ ID        Time                 Host                      Tags        Paths      
 
 636a8b45  2024-11-08 03:39:08  arm3                      Wokingham   /var/google/plord1250-drive                   5.767 GiB
 
-2d664274  2024-12-04 00:04:26  Peter's Galaxy S20 FE 5G              /storage/emulated/0/Download/Signal           10.731 GiB
+7a959e03  2024-12-06 00:00:02  plordmacbook              Wokingham   /Users/plord                                  347.906 GiB
 
-9b61d859  2024-12-04 10:21:25  plordmacbook              Wokingham   /Users/plord                                  340.246 GiB
+60fa2c40  2024-12-06 00:00:02  arm5                      Plymouth    /home                                         30.526 MiB
 ...
 ```
 
 ### List the snapshots of a specific backup
 
 ```
-$ restic snapshots --host "Peter's Galaxy S20 FE 5G" --path "/storage/emulated/0/Download/Signal "
+$ restic snapshots --host plordmacbook --path /Users/plord               
 repository bd3a858e opened (version 2, compression level auto)
-ID        Time                 Host                      Tags        Paths                                 Size
----------------------------------------------------------------------------------------------------------------------
-06ba14f8  2024-10-18 21:59:41  Peter's Galaxy S20 FE 5G              /storage/emulated/0/Download/Signal   10.287 GiB
-dcc9f70c  2024-10-31 09:06:09  Peter's Galaxy S20 FE 5G              /storage/emulated/0/Download/Signal   10.368 GiB
-44983c0f  2024-11-03 00:04:46  Peter's Galaxy S20 FE 5G              /storage/emulated/0/Download/Signal   10.374 GiB
-91dd9e0b  2024-11-10 00:17:15  Peter's Galaxy S20 FE 5G              /storage/emulated/0/Download/Signal   10.452 GiB
-9585a700  2024-11-16 00:05:14  Peter's Galaxy S20 FE 5G              /storage/emulated/0/Download/Signal   10.576 GiB
-2bd20d6f  2024-11-21 00:33:22  Peter's Galaxy S20 FE 5G              /storage/emulated/0/Download/Signal   10.664 GiB
-c5917a64  2024-11-22 04:04:26  Peter's Galaxy S20 FE 5G              /storage/emulated/0/Download/Signal   10.673 GiB
-4dfa81ac  2024-11-25 08:05:06  Peter's Galaxy S20 FE 5G              /storage/emulated/0/Download/Signal   10.681 GiB
-3f2228df  2024-11-26 00:46:00  Peter's Galaxy S20 FE 5G              /storage/emulated/0/Download/Signal   10.681 GiB
-8e7a4f36  2024-11-27 00:11:34  Peter's Galaxy S20 FE 5G              /storage/emulated/0/Download/Signal   10.683 GiB
-75c31ed6  2024-11-28 05:04:47  Peter's Galaxy S20 FE 5G              /storage/emulated/0/Download/Signal   10.701 GiB
-93cf69a3  2024-11-29 03:04:37  Peter's Galaxy S20 FE 5G              /storage/emulated/0/Download/Signal   10.720 GiB
-9bda2b99  2024-11-30 00:04:14  Peter's Galaxy S20 FE 5G              /storage/emulated/0/Download/Signal   10.720 GiB
-37ef3430  2024-12-01 09:40:03  Peter's Galaxy S20 FE 5G              /storage/emulated/0/Download/Signal   10.730 GiB
-e83a6da0  2024-12-02 00:44:30  Peter's Galaxy S20 FE 5G              /storage/emulated/0/Download/Signal   10.730 GiB
-f180cc32  2024-12-03 09:05:44  Peter's Galaxy S20 FE 5G              /storage/emulated/0/Download/Signal   10.731 GiB
-2d664274  2024-12-04 00:04:26  Peter's Galaxy S20 FE 5G              /storage/emulated/0/Download/Signal   10.731 GiB
----------------------------------------------------------------------------------------------------------------------
-17 snapshots
+ID        Time                 Host          Tags        Paths         Size
+----------------------------------------------------------------------------------
+a7d13468  2024-10-10 17:51:05  plordmacbook  Wokingham   /Users/plord  268.631 GiB
+7d5464b6  2024-10-31 12:57:21  plordmacbook  Wokingham   /Users/plord  273.460 GiB
+28a6fbea  2024-11-03 12:00:02  plordmacbook  Wokingham   /Users/plord  281.143 GiB
+908df52a  2024-11-10 00:00:02  plordmacbook  Wokingham   /Users/plord  315.352 GiB
+61c5a983  2024-11-17 00:00:02  plordmacbook  Wokingham   /Users/plord  301.680 GiB
+384761a7  2024-11-22 00:00:01  plordmacbook  Wokingham   /Users/plord  326.791 GiB
+f265c7a1  2024-11-23 01:05:25  plordmacbook  Wokingham   /Users/plord  327.701 GiB
+e54ae25d  2024-11-25 07:35:01  plordmacbook  Wokingham   /Users/plord  329.443 GiB
+31298c9d  2024-11-26 07:35:00  plordmacbook  Wokingham   /Users/plord  343.440 GiB
+86f38b5d  2024-11-27 00:00:02  plordmacbook  Wokingham   /Users/plord  347.895 GiB
+9a8af0c1  2024-11-28 07:35:01  plordmacbook  Wokingham   /Users/plord  329.724 GiB
+eea15373  2024-11-29 07:35:01  plordmacbook  Wokingham   /Users/plord  329.593 GiB
+55989d60  2024-11-30 07:35:02  plordmacbook  Wokingham   /Users/plord  331.843 GiB
+c7a9150a  2024-12-01 08:01:14  plordmacbook  Wokingham   /Users/plord  334.443 GiB
+fd098d0e  2024-12-02 16:49:03  plordmacbook  Wokingham   /Users/plord  334.999 GiB
+733351ee  2024-12-03 00:00:01  plordmacbook  Wokingham   /Users/plord  336.131 GiB
+9b61d859  2024-12-04 10:21:25  plordmacbook  Wokingham   /Users/plord  340.246 GiB
+4111c125  2024-12-05 00:00:02  plordmacbook  Wokingham   /Users/plord  347.918 GiB
+7a959e03  2024-12-06 00:00:02  plordmacbook  Wokingham   /Users/plord  347.906 GiB
+----------------------------------------------------------------------------------
+19 snapshots
 ```
 
 ### List the contents of a given snapshot
 
 ```
-$ restic ls 2d664274
-repository bd3a858e opened (version 2, compression level auto)
-[0:18] 100.00%  83 / 83 index files loaded
-snapshot 2d664274 of [/storage/emulated/0/Download/Signal ] at 2024-12-04 00:04:26.27960027 +0000 UTC by @Peter's Galaxy S20 FE 5G filtered by []:
-/storage
-/storage/emulated
-/storage/emulated/0
-/storage/emulated/0/Download
-/storage/emulated/0/Download/Signal 
-/storage/emulated/0/Download/Signal /signal-2024-12-02-00-57-54.backup
-/storage/emulated/0/Download/Signal /signal-2024-12-03-00-55-23.backup
+$ restic ls 7a959e03 
+snapshot 7a959e03 of [/Users/plord] at 2024-12-06 00:00:02.450435 +0000 UTC by root@plordmacbook filtered by []:
+/Users
+/Users/plord
+/Users/plord/.CFUserTextEncoding
+/Users/plord/.DS_Store
+/Users/plord/.ai
+/Users/plord/.ai/bin
+/Users/plord/.ai/bin/llava
+/Users/plord/.ai/bin/llava/ggml-metal.metal
+/Users/plord/.android
+/Users/plord/.android/adb_usb.ini
+/Users/plord/.android/adbkey
+/Users/plord/.android/adbkey.pub
+/Users/plord/.anydesk
+/Users/plord/.anydesk/.anydesk.trace
+/Users/plord/.anydesk/AnyDesk
+/Users/plord/.anydesk/AnyDesk/outgoing iPhone (1807481502)-plord (821718307) 0.anydesk
+/Users/plord/.anydesk/anydesk.trace
+/Users/plord/.anydesk/connection_trace.txt
+/Users/plord/.anydesk/global_cache
+...
 ```
 
 ### Search for a file or directory
@@ -224,23 +237,16 @@ $ find /tmp/storage/
 ### See whats changed between snapshots
 
 ```
-$ restic diff f180cc32 e83a6da0
-repository bd3a858e opened (version 2, compression level auto)
-comparing snapshot f180cc32 to e83a6da0:
+$ restic diff 4111c125 7a959e03 | more
+comparing snapshot 4111c125 to 7a959e03:
 
-[0:18] 100.00%  83 / 83 index files loaded
-+    /storage/emulated/0/Download/Signal /signal-2024-11-30-00-52-21.backup
-+    /storage/emulated/0/Download/Signal /signal-2024-12-01-00-55-14.backup
--    /storage/emulated/0/Download/Signal /signal-2024-12-02-00-57-54.backup
--    /storage/emulated/0/Download/Signal /signal-2024-12-03-00-55-23.backup
-
-Files:           2 new,     2 removed,     0 changed
-Dirs:            0 new,     0 removed
-Others:          0 new,     0 removed
-Data Blobs:   7371 new,  7237 removed
-Tree Blobs:      6 new,     6 removed
-  Added:   10.731 GiB
-  Removed: 10.731 GiB
+-    /Users/plord/.Trash/.DS_Store
+-    /Users/plord/.Trash/Google Keep- Free Note Taking App for Personal Use.webloc
+M    /Users/plord/.local/share/signal-cli/data/522489
+M    /Users/plord/.local/share/signal-cli/data/522489.d/account.db
+M    /Users/plord/.wake.status
+M    /Users/plord/.zsh_history
+...
 ```
 
 ## Other tools used

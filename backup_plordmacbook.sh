@@ -32,7 +32,7 @@ RESTIC="sudo -E restic --cache-dir /var/root/restic-cache"
 echo "Backing up /Users/plord"
 create_topic /Users/plord
 running /Users/plord
-${RESTIC} backup --tag Wokingham /Users/plord --exclude /Users/plord/Library/CloudStorage --exclude '/Users/plord/Calibre Library/' 2>/tmp/resticerror && success /Users/plord || failure /Users/plord $(cat /tmp/resticerror)
+${RESTIC} backup --tag Wokingham /Users/plord --exclude /Users/plord/Library/CloudStorage --exclude '/Users/plord/Calibre Library/' --exclude '/Users/plord/Library/Caches' 2>/tmp/resticerror && success /Users/plord || failure /Users/plord $(cat /tmp/resticerror)
 
 # backup ebooks seperatly
 #

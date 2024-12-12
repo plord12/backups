@@ -256,6 +256,7 @@ The backup scripts also make use of -
 * [rclone](https://rclone.org/) to copy files from cloud storage (Google Drive and Google Photos) prior to backing up with restic
 * [offlineimap](http://www.offlineimap.org) to download email from imap server prior to backing up with restic
 * [mosquitto_pub](https://mosquitto.org/man/mosquitto_pub-1.html) to communicate with home assistant
+* [Wireguard VPN](https://www.wireguard.com/) for offsite connectivity
 
 ## Testing the backups
 

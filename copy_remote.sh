@@ -46,7 +46,8 @@ RESTIC="sudo -E -u www-data restic --no-cache --retry-lock 5m"
 
 # add tag for phone
 #
-${RESTIC} tag --set Wokingham --host "Peter's Galaxy S20 FE 5G"
+${RESTIC} tag --set Wokingham --host "Peter's Galaxy S20 FE 5G" 2>/tmp/resticcopy.log || mosquitto_pub -t homeassistant/infoalert -m "$(uname -n) $0: $(cat /tmp/resticcopy.log)"
+cat /tmp/resticcopy.log
 
 # Wok -> Ply
 #

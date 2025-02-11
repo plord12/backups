@@ -74,7 +74,7 @@ ${RESTIC} --repo ${WOK_REPO} snapshots --latest 1
 #
 ${RESTIC} --repo ${PLY_REPO} snapshots --latest 1 --json  | jq -r '.[] | "\(.hostname)|\(.paths[0])"' | while IFS="|" read -r hostname paths 
 do 
-  if [ "${paths}" != "/var/AmazonCopy" -a "${paths}" != "/var/google/plord1250-drive" ]
+  if [ "${paths}" != "/var/AmazonCopy" -a "${paths}" != "/var/google/plord1250-drive" -a ${paths} != "/backup" ]
   then
     echo "updating plymouth status ${hostname} ${paths}"
 

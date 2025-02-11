@@ -17,7 +17,7 @@ delete_topic() {
 	id="${IDPREFIX}_$(echo "${1}" | tr " '.-/" "_")$(echo "${2}" | tr " '.-/" "_" | sed -e 's+_$++')"
 	mosquitto_pub -r -t "homeassistant/sensor/${id}/config" -m ""
 	mosquitto_pub -r -t "homeassistant/sensor/${id}/state" -m ""
-	mosquitto_pub -r -t "homeassistant/sensor/${id}/attrinutes" -m ""
+	mosquitto_pub -r -t "homeassistant/sensor/${id}/attributes" -m ""
 }
 
 # create a MQTT topic to report backup status to

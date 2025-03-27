@@ -20,6 +20,7 @@ RESTIC="sudo -E restic --cache-dir /root/.cache/restic"
 # run offlineimap in the backgroup
 #
 (
+	killall offlineimap
 	/usr/bin/offlineimap -o >/tmp/offlineimap.log 2>&1
 	if [ $? != 0 ]
 	then
@@ -36,7 +37,13 @@ apt list --installed > /home/plord/installed-packages.txt
 echo "Backing up /home"
 create_topic /home
 running /home
-${RESTIC} backup  --tag Wokingham --exclude /home/plord/src/immich --exclude .cache --exclude .cargo --exclude .gradle --exclude .rustup /home 2>/tmp/resticerror && success /home || failure /home $(cat /tmp/resticerror)
+${RESTIC} backup  --tag Wokingham --exclude /home/plord/src/immich \
+	--exclude .cache \
+	--exclude .cargo \
+	--exclude .gradle \
+	--exclude .rustup \
+	--exclude /home/plord/src/docker-mailserver \
+	/home 2>/tmp/resticerror && success /home || failure /home $(cat /tmp/resticerror)
 
 # backup /etc
 #
@@ -100,4 +107,16 @@ create_topic /var/ImapCopy
 running /var/ImapCopy
 ${RESTIC} backup --tag Wokingham /var/ImapCopy 2>/tmp/restic-imapcopy-error && success /var/ImapCopy || failure /var/ImapCopy $(cat /tmp/restic-impacopy-error)
 
+echo "Backing up mailserver"
+create_topic /home/plord/src/docker-mailserver
+running /home/plord/src/docker-mailserver
+${RESTIC} backup --tag Wokingham /home/plord/src/docker-mailserver 2>/tmp/restic-imapcopy-error && success /home/plord/src/docker-mailserver || failure /home/plord/src/docker-mailserver $(cat /tmp/restic-impacopy-error)
 
+# arm1 - arm1 isn't really suitable for restic
+echo "Backing up arm1 backup"
+rclone sync ssh-arm1:/backup/ /var/arm1/backup/
+#rclone sync ssh-arm1:/config/ /var/arm1/config/ --exclude home-assistant_v2.db\* --exclude /config/zigbee2mqtt/log/
+export RESTICHOSTNAME=arm1
+create_topic /var/arm1/backup
+running /var/arm1/backup
+${RESTIC} backup --exclude _swap.swap --tag Wokingham --host ${RESTICHOSTNAME} /var/arm1/backup 2>/tmp/resticerror && success /var/arm1/backup || failure /var/arm1/backup $(cat /tmp/resticerror)

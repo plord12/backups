@@ -20,6 +20,7 @@ RESTIC="sudo -E restic --cache-dir /root/.cache/restic"
 # run offlineimap in the backgroup
 #
 (
+	set +e
 	killall offlineimap
 	/usr/bin/offlineimap -o >/tmp/offlineimap.log 2>&1
 	if [ $? != 0 ]
@@ -75,13 +76,13 @@ ${RESTIC} backup --tag Wokingham --exclude /home/plord/src/immich/postgres --exc
 
 # google drive backups
 #
-# plord1200@gmail.com - bigger mp4s, jean & george
-# plord1300@gmail.com - festivals
+# plord1200@gmail.com - padi, first aid, jean & george (moved to immich)
+# plord1300@gmail.com - festivals (deleted)
 # plord1250@gmail.com - backups (no longer used)
 # plord1260@gmail.com - flutter
 # plord1270@gmail.com - signal backups (not used)
 
-for user in plord12 plord1200 plord1300 
+for user in plord12 
 do
 	echo "Backing up /var/google/${user}-photos/media/all"
 	mkdir -p /var/google/${user}-photos/media/all
@@ -91,7 +92,7 @@ do
 	( ${RESTIC} backup --tag Wokingham --ignore-inode /var/google/${user}-photos/media/all 2>/tmp/restic-${user}-photos-error && success /var/google/${user}-photos/media/all || failure /var/google/${user}-photos/media/all $(cat /tmp/restic-${user}-photos-error) ) &
 done
 wait
-for user in plord12 plord1200 plord1260 peterdawn
+for user in plord12 plord1260 peterdawn
 do
 	echo "Backing up /var/google/${user}-drive"
 	mkdir -p /var/google/${user}-drive
@@ -105,7 +106,7 @@ wait
 echo "Backing up imap"
 create_topic /var/ImapCopy
 running /var/ImapCopy
-${RESTIC} backup --tag Wokingham /var/ImapCopy 2>/tmp/restic-imapcopy-error && success /var/ImapCopy || failure /var/ImapCopy $(cat /tmp/restic-impacopy-error)
+${RESTIC} backup --tag Wokingham /var/ImapCopy /var/ImapCopySaved 2>/tmp/restic-imapcopy-error && success /var/ImapCopy || failure /var/ImapCopy $(cat /tmp/restic-impacopy-error)
 
 echo "Backing up mailserver"
 create_topic /home/plord/src/docker-mailserver

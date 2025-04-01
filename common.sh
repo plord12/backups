@@ -40,7 +40,7 @@ running() {
 success() {
 	id="${IDPREFIX}_$(echo ${RESTICHOSTNAME} | tr " '.-/" "_")$(echo "${1}" | tr " '.-/" "_" | sed -e 's+_$++')"
 	mosquitto_pub -r -t "homeassistant/sensor/restic/${id}/state" -m "Success"
-	short_id=$(${RESTIC} snapshots --host "${RESTICHOSTNAME}" --path "${1}" --latest 1 --json | jq -r '.[0].short_id')
+	short_id=$(${RESTIC} snapshots --host "${RESTICHOSTNAME}" --path "${1}" --latest 1 --json | jq -r '.[-1].short_id')
 	mosquitto_pub -r -t "homeassistant/sensor/restic/${id}/attributes" \
 		-m "$(${RESTIC} snapshots ${short_id} --json | jq -c 'add')"
 }

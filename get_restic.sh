@@ -16,7 +16,7 @@ then
     arch=arm64
 fi
 
-restic_ver=0.17.3
+restic_ver=0.18.0
 
 set -e
 

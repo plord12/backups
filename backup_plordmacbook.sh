@@ -39,6 +39,7 @@ ${RESTIC} backup --tag Wokingham /Users/plord \
     --exclude '/Users/plord/Library/Metadata/CoreSpotlight/' \
     --exclude '/Users/plord/Library/Group Containers/group.com.apple.CoreSpeech/' \
     --exclude '/Users/plord/Library/Daemon Containers/48DC7BDD-8EEF-44C0-9C1E-8368A1B2444C/' \
+    --exclude '/Users/plord/Library/Containers/com.apple.lighthouse.PnROnDeviceWorker/' \
     2>/tmp/resticerror && success /Users/plord || failure /Users/plord $(cat /tmp/resticerror)
 
 # backup ebooks seperatly

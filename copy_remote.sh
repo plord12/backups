@@ -70,20 +70,36 @@ ${RESTIC} --repo ${PLY_REPO} snapshots --latest 1
 echo "Wokingham latest"
 ${RESTIC} --repo ${WOK_REPO} snapshots --latest 1
 
-# update plymouth status
+# update workingham status
 #
-${RESTIC} --repo ${PLY_REPO} snapshots --latest 1 --json  | jq -r '.[] | "\(.hostname)|\(.paths[0])"' | while IFS="|" read -r hostname paths 
-do 
-  if [ "${paths}" != "/var/AmazonCopy" -a "${paths}" != "/var/google/plord1250-drive" -a ${paths} != "/backup" ]
-  then
-    echo "updating plymouth status ${hostname} ${paths}"
-
-    RESTICHOSTNAME="${hostname}" RESTIC_REPOSITORY=${PLY_REPO} IDPREFIX=remote_restic create_topic "${paths}"
-    RESTICHOSTNAME="${hostname}" RESTIC_REPOSITORY=${PLY_REPO} IDPREFIX=remote_restic success "${paths}"
-  fi
+${RESTIC} --repo ${WOK_REPO} snapshots --latest 1 --json  | jq -r '.[] | "\(.hostname)|\(.paths[0])|\(.tags)"' | while IFS="|" read -r hostname paths tags
+do
+  case "${tags}" in
+  *Keep*) echo "removing wokingham homeassistant status ${hostname} ${paths}"
+          RESTICHOSTNAME="${hostname}" RESTIC_REPOSITORY=${WOK_REPO} delete_topic "${paths}"
+  	  ;;
+  *)      echo "updating wokingham homeassistant status ${hostname} ${paths}"
+          RESTICHOSTNAME="${hostname}" RESTIC_REPOSITORY=${WOK_REPO} create_topic "${paths}"
+	  ;;
+  esac
 done
 
-# update any missing status
+# update plymouth status
+#
+${RESTIC} --repo ${PLY_REPO} snapshots --latest 1 --json  | jq -r '.[] | "\(.hostname)|\(.paths[0])|\(.tags)"' | while IFS="|" read -r hostname paths tags
+do
+  case "${tags}" in
+  *Keep*) echo "removing plymouth homeassistant status ${hostname} ${paths}"
+          RESTICHOSTNAME="${hostname}" RESTIC_REPOSITORY=${PLY_REPO} IDPREFIX=remote_restic delete_topic "${paths}"
+  	  ;;
+  *)      echo "updating plymouth homeassistant status ${hostname} ${paths}"
+          RESTICHOSTNAME="${hostname}" RESTIC_REPOSITORY=${PLY_REPO}  IDPREFIX=remote_restic create_topic "${paths}"
+          RESTICHOSTNAME="${hostname}" RESTIC_REPOSITORY=${PLY_REPO} IDPREFIX=remote_restic success "${paths}"
+	  ;;
+  esac
+done
+
+# special case - update any missing status
 #
 ${RESTIC} snapshots --latest 1 --json --host arm5 --host "Peter's Galaxy S20 FE 5G" | jq -r '.[] | "\(.hostname)|\(.paths[0])"' | while IFS="|" read -r hostname paths 
 do 

@@ -36,6 +36,11 @@ The server `arm4` hosts the local repository on a 4TB SSD drive.  A [rest server
 
 The server `arm5` is located offsite and hosts the remote repository on a 4TB SSD drive.  The `copy_remote.sh` script syncronises the two repositories.
 
+## Tags
+
+Snapshots are tagged with the location of the orginating directory.  An additional tak, Keep, is used for old snapshats (no-longer being backed up
+but we want to keep the snapshots).
+
 ## Periodic repository pruning
 
 The script `prune.sh` can be used to periodically remove outdated data to avoid running out of disk space.

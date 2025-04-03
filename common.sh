@@ -14,10 +14,10 @@ IDPREFIX=restic
 # delete MQTT topic - only used when we got things wrong
 #
 delete_topic() {
-	id="${IDPREFIX}_$(echo "${1}" | tr " '.-/" "_")$(echo "${2}" | tr " '.-/" "_" | sed -e 's+_$++')"
-	mosquitto_pub -r -t "homeassistant/sensor/${id}/config" -m ""
-	mosquitto_pub -r -t "homeassistant/sensor/${id}/state" -m ""
-	mosquitto_pub -r -t "homeassistant/sensor/${id}/attributes" -m ""
+	id="${IDPREFIX}_$(echo "${RESTICHOSTNAME}" | tr " '.-/" "_")$(echo "${1}" | tr " '.-/" "_" | sed -e 's+_$++')"
+	mosquitto_pub -r -t "homeassistant/sensor/restic/${id}/config" -m ""
+	mosquitto_pub -r -t "homeassistant/sensor/restic/${id}/state" -m ""
+	mosquitto_pub -r -t "homeassistant/sensor/restic/${id}/attributes" -m ""
 }
 
 # create a MQTT topic to report backup status to

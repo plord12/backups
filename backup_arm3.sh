@@ -19,13 +19,23 @@ RESTIC="sudo -E restic --cache-dir /root/.cache/restic"
 
 # run offlineimap in the backgroup
 #
+#(
+#	set +e
+#	killall offlineimap
+#	/usr/bin/offlineimap -o >/tmp/offlineimap.log 2>&1
+#	if [ $? != 0 ]
+#	then
+#		(echo "offlineimap"; echo; tail -5 /tmp/offlineimap.log) | signal-cli -u +441189627101 send +447867970260 --message-from-stdin
+#	fi 
+#)&
+
+# run u3acommunities rsync in background
+#
 (
-	set +e
-	killall offlineimap
-	/usr/bin/offlineimap -o >/tmp/offlineimap.log 2>&1
+	rsync -avz --delete-after u3acommunities.org@ssh.gb.stackcp.com:public_html/wp-content/updraft/ /var/u3acommunities/ >/tmp/rsync.log 2>&1
 	if [ $? != 0 ]
 	then
-		(echo "offlineimap"; echo; tail -5 /tmp/offlineimap.log) | signal-cli -u +441189627101 send +447867970260 --message-from-stdin
+		(echo "u3acommunities"; echo; tail -5 /tmp/rsync.log) | signal-cli -u +441189627101 send +447867970260 --message-from-stdin
 	fi 
 )&
 
@@ -57,6 +67,7 @@ ${RESTIC} backup --tag Wokingham --exclude .cache /etc /usr/local /root /var/spo
 #
 echo "Backing up /var/www"
 create_topic /var/www
+echo .dump | sqlite3 /var/www/html/baikal/Specific/db/db.sqlite | sudo tee /var/www/html/baikal/Specific/db/mydb.sql >/dev/null
 running /var/www
 ${RESTIC} backup --tag Wokingham /var/www 2>/tmp/resticerror && success /var/www || failure /var/www $(cat /tmp/resticerror)
 
@@ -103,10 +114,10 @@ do
 done
 wait
 
-echo "Backing up imap"
-create_topic /var/ImapCopy
-running /var/ImapCopy
-${RESTIC} backup --tag Wokingham /var/ImapCopy /var/ImapCopySaved 2>/tmp/restic-imapcopy-error && success /var/ImapCopy || failure /var/ImapCopy $(cat /tmp/restic-impacopy-error)
+#echo "Backing up imap"
+#create_topic /var/ImapCopy
+#running /var/ImapCopy
+#${RESTIC} backup --tag Wokingham /var/ImapCopy /var/ImapCopySaved 2>/tmp/restic-imapcopy-error && success /var/ImapCopy || failure /var/ImapCopy $(cat /tmp/restic-impacopy-error)
 
 echo "Backing up mailserver"
 create_topic /home/plord/src/docker-mailserver
@@ -116,8 +127,14 @@ ${RESTIC} backup --tag Wokingham /home/plord/src/docker-mailserver 2>/tmp/restic
 # arm1 - arm1 isn't really suitable for restic
 echo "Backing up arm1 backup"
 rclone sync ssh-arm1:/backup/ /var/arm1/backup/
-#rclone sync ssh-arm1:/config/ /var/arm1/config/ --exclude home-assistant_v2.db\* --exclude /config/zigbee2mqtt/log/
 export RESTICHOSTNAME=arm1
 create_topic /var/arm1/backup
 running /var/arm1/backup
 ${RESTIC} backup --exclude _swap.swap --tag Wokingham --host ${RESTICHOSTNAME} /var/arm1/backup 2>/tmp/resticerror && success /var/arm1/backup || failure /var/arm1/backup $(cat /tmp/resticerror)
+
+echo "Backing up u3acommunities"
+export RESTICHOSTNAME=u3acommunities
+create_topic /var/u3acommunities
+running /var/u3acommunities
+${RESTIC} backup --tag Wokingham --host ${RESTICHOSTNAME} /var/u3acommunities 2>/tmp/restic-u3acommunities-error && success /var/u3acommunities || failure /var/u3acommunities $(cat /tmp/restic-u3acommunities-error)
+

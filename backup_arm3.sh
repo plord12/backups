@@ -93,16 +93,16 @@ ${RESTIC} backup --tag Wokingham --exclude /home/plord/src/immich/postgres --exc
 # plord1260@gmail.com - flutter
 # plord1270@gmail.com - signal backups (not used)
 
-for user in plord12 
-do
-	echo "Backing up /var/google/${user}-photos/media/all"
-	mkdir -p /var/google/${user}-photos/media/all
-	rclone sync google-photos-${user}:/media/all/ /var/google/${user}-photos/media/all/
-	create_topic /var/google/${user}-photos/media/all
-	running /var/google/${user}-photos/media/all
-	( ${RESTIC} backup --tag Wokingham --ignore-inode /var/google/${user}-photos/media/all 2>/tmp/restic-${user}-photos-error && success /var/google/${user}-photos/media/all || failure /var/google/${user}-photos/media/all $(cat /tmp/restic-${user}-photos-error) ) &
-done
-wait
+#for user in plord12 
+#do
+#	echo "Backing up /var/google/${user}-photos/media/all"
+#	mkdir -p /var/google/${user}-photos/media/all
+#	rclone sync google-photos-${user}:/media/all/ /var/google/${user}-photos/media/all/
+#	create_topic /var/google/${user}-photos/media/all
+#	running /var/google/${user}-photos/media/all
+#	( ${RESTIC} backup --tag Wokingham --ignore-inode /var/google/${user}-photos/media/all 2>/tmp/restic-${user}-photos-error && success /var/google/${user}-photos/media/all || failure /var/google/${user}-photos/media/all $(cat /tmp/restic-${user}-photos-error) ) &
+#done
+#wait
 for user in plord12 plord1260 peterdawn
 do
 	echo "Backing up /var/google/${user}-drive"

@@ -13,6 +13,8 @@ function stopvpn() {
 
 trap stopvpn EXIT
 
+set -x
+
 # start VPN
 #
 echo "Starting VPN"
@@ -44,17 +46,12 @@ export RESTIC_FROM_PASSWORD=${RESTIC_PASSWORD}
 #
 RESTIC="sudo -E -u www-data restic --no-cache --retry-lock 5m"
 
-# add tag for phone
-#
-${RESTIC} tag --set Wokingham --host "Peter's Galaxy S20 FE 5G" 2>/tmp/resticcopy.log || mosquitto_pub -t homeassistant/infoalert -m "$(uname -n) $0: $(cat /tmp/resticcopy.log)"
-cat /tmp/resticcopy.log
-
 # Wok -> Ply
 #
 echo "Wokingham -> Plymouth"
 export RESTIC_FROM_REPOSITORY=${WOK_REPO}
 export RESTIC_REPOSITORY=${PLY_REPO}
-${RESTIC} --repo ${PLY_REPO} copy --from-repo ${WOK_REPO} --tag Wokingham 2>/tmp/resticcopy.log || mosquitto_pub -t homeassistant/infoalert -m "$(uname -n) $0: $(cat /tmp/resticcopy.log)"
+${RESTIC} --repo ${PLY_REPO} copy --from-repo ${WOK_REPO} --tag Wokingham --tag Seascale 2>/tmp/resticcopy.log || mosquitto_pub -t homeassistant/infoalert -m "$(uname -n) $0: $(cat /tmp/resticcopy.log)"
 cat /tmp/resticcopy.log
 
 # Ply -> Wok
@@ -101,7 +98,7 @@ done
 
 # special case - update any missing status
 #
-${RESTIC} snapshots --latest 1 --json --host arm5 --host "Peter's Galaxy S20 FE 5G" | jq -r '.[] | "\(.hostname)|\(.paths[0])"' | while IFS="|" read -r hostname paths 
+${RESTIC} snapshots --latest 1 --json --host arm5 | jq -r '.[] | "\(.hostname)|\(.paths[0])"' | while IFS="|" read -r hostname paths 
 do 
   echo "updating missing status ${hostname} ${paths}"
 

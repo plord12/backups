@@ -27,6 +27,12 @@ export PATH
 #
 RESTIC="sudo -E restic --cache-dir /var/root/restic-cache"
 
+# fireup signal for a minute to get latest
+#
+open /Applications/Signal.app
+sleep 60
+killall Signal
+
 # backup home directory
 #
 echo "Backing up /Users/plord"
@@ -41,6 +47,8 @@ ${RESTIC} backup --tag Wokingham /Users/plord \
     --exclude '/Users/plord/Library/Daemon Containers/48DC7BDD-8EEF-44C0-9C1E-8368A1B2444C/' \
     --exclude '/Users/plord/Library/Containers/com.apple.lighthouse.PnROnDeviceWorker/' \
     --exclude '/Users/plord/Library/DuetExpertCenter/ATXAppPredictionMicroLocation' \
+    --exclude '/Users/plord/Library/DuetExpertCenter/_ATXAppLaunchLocation' \
+    --exclude '/Users/plord/Library/Application Support/MobileSync' \
     2>/tmp/resticerror && success /Users/plord || failure /Users/plord $(cat /tmp/resticerror)
 
 # backup ebooks seperatly
@@ -50,10 +58,18 @@ create_topic '/Users/plord/Calibre Library'
 running '/Users/plord/Calibre Library'
 ${RESTIC} backup --tag Wokingham '/Users/plord/Calibre Library' 2>/tmp/resticerror && success '/Users/plord/Calibre Library' || failure '/Users/plord/Calibre Library' $(cat /tmp/resticerror)
 
-# sync ebooks to webserver, although not currently used
+# mobilesync (ipad / macbook etc)
+#
+echo "Backing up /Users/plord/Library/Application Support/MobileSync"
+create_topic '/Users/plord/Library/Application Support/MobileSync'
+running '/Users/plord/Library/Application Support/MobileSync'
+${RESTIC} backup --tag Wokingham '/Users/plord/Library/Application Support/MobileSync' 2>/tmp/resticerror && success '/Users/plord/Library/Application Support/MobileSync' || failure '/Users/plord/Library/Application Support/MobileSync' $(cat /tmp/resticerror)
+
+
+# sync ebooks to webserver
 #
 echo "Rsyncing /Users/plord/Calibre Library"
-rsync --rsync-path 'sudo -E -u calibre rsync' -avz --delete '/Users/plord/Calibre Library/' arm3.local:/var/CalibreLibrary/
+rsync --rsync-path 'sudo -E -u calibre rsync' -avz --delete '/Users/plord/Calibre Library/' arm3:/var/CalibreLibrary/
 
 # sleep after 1mins
 #

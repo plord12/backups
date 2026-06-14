@@ -63,13 +63,13 @@ ${RESTIC} --repo ${WOK_REPO} copy --from-repo ${PLY_REPO} --tag Plymouth 2>/tmp/
 cat /tmp/resticcopy.log
 
 echo "Plymouth latest"
-${RESTIC} --repo ${PLY_REPO} snapshots --latest 1
+${RESTIC} --repo ${PLY_REPO} snapshots --latest 1 --group-by host,paths
 echo "Wokingham latest"
-${RESTIC} --repo ${WOK_REPO} snapshots --latest 1
+${RESTIC} --repo ${WOK_REPO} snapshots --latest 1 --group-by host,paths
 
 # update workingham status
 #
-${RESTIC} --repo ${WOK_REPO} snapshots --latest 1 --json  | jq -r '.[] | "\(.hostname)|\(.paths[0])|\(.tags)"' | while IFS="|" read -r hostname paths tags
+${RESTIC} --repo ${WOK_REPO} snapshots --latest 1 --group-by host,paths --json  | jq -r '.[].snapshots[] | "\(.hostname)|\(.paths[0])|\(.tags)"' | while IFS="|" read -r hostname paths tags
 do
   case "${tags}" in
   *Keep*) echo "removing wokingham homeassistant status ${hostname} ${paths}"
@@ -83,7 +83,7 @@ done
 
 # update plymouth status
 #
-${RESTIC} --repo ${PLY_REPO} snapshots --latest 1 --json  | jq -r '.[] | "\(.hostname)|\(.paths[0])|\(.tags)"' | while IFS="|" read -r hostname paths tags
+${RESTIC} --repo ${PLY_REPO} snapshots --latest 1 --group-by host,paths --json  | jq -r '.[].snapshots[] | "\(.hostname)|\(.paths[0])|\(.tags)"' | while IFS="|" read -r hostname paths tags
 do
   case "${tags}" in
   *Keep*) echo "removing plymouth homeassistant status ${hostname} ${paths}"
@@ -98,7 +98,7 @@ done
 
 # special case - update any missing status
 #
-${RESTIC} snapshots --latest 1 --json --host arm5 | jq -r '.[] | "\(.hostname)|\(.paths[0])"' | while IFS="|" read -r hostname paths 
+${RESTIC} snapshots --latest 1 --group-by host,paths --json --host arm5 | jq -r '.[].snapshots[] | "\(.hostname)|\(.paths[0])"' | while IFS="|" read -r hostname paths 
 do 
   echo "updating missing status ${hostname} ${paths}"
 

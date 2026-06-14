@@ -16,7 +16,7 @@ then
     arch=arm64
 fi
 
-restic_ver=0.18.0
+restic_ver=0.19.0
 restserver_ver=0.14.0
 
 set -e
